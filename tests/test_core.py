@@ -39,7 +39,23 @@ def test_scoring_misread_and_hindi_matra():
     assert r["misread"] == 1
     _, ref = scoring.tokenise("बच्चे मैदान में खेल रहे हैं।")
     _, hyp = scoring.tokenise("बच्चे मैदान में खेल रहे है")  # dropped matra: forgiven
-    assert scoring.score_reading(ref, hyp)["correct"] == 6
+    assert scoring.score_reading(ref, hyp, 0.80)["correct"] == 6  # lenient mode forgives it
+    assert scoring.score_reading(ref, hyp)["correct"] == 5         # strict mode does not
+
+
+def test_strict_catches_mispronunciation():
+    for good, said in [("sooriyan", "sariyan"), ("சூரியன்", "சரியன்"), ("सूरज", "सरज"), ("birds", "burds")]:
+        _, ref = scoring.tokenise(f"the {good} shines")
+        _, hyp = scoring.tokenise(f"the {said} shines")
+        r = scoring.score_reading(ref, hyp)
+        assert r["correct"] == 2 and r["misread"] == 1, (good, said, r)
+
+
+def test_strict_forgives_only_recogniser_noise():
+    for good, said in [("सूरज़", "सूरज"), ("சூரியன்", "சூரியன"), ("मंच", "मँच")]:
+        _, ref = scoring.tokenise(good)
+        _, hyp = scoring.tokenise(said)
+        assert scoring.score_reading(ref, hyp)["correct"] == 1, (good, said)
 
 
 def test_metrics():

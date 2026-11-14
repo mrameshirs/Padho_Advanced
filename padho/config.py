@@ -54,3 +54,11 @@ MIN_COVERAGE_FOR_TARGET = 80
 MET_TO_PROMOTE = 3
 
 CLASSES = ["Balvatika"] + [f"Class {i}" for i in range(1, 9)]
+
+# How strictly a heard word must match the passage word to count as correct.
+# Strict is the default: a changed vowel or sound is marked as misread.
+STRICTNESS = {
+    "Strict (recommended)": 1.0,
+    "Standard": 0.90,
+    "Lenient": 0.80,
+}

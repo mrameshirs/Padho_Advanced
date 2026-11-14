@@ -9,10 +9,21 @@ import numpy as np
 PUNCT = re.compile(r"[।॥,.\?!;:\"'“”‘’()\-–—…]")
 
 
+# Only differences that are recogniser spelling noise, never a child's pronunciation:
+#   nukta dots (ज़ / ज), chandrabindu vs anusvara (ँ / ं), and a word-final virama
+#   or pulli (சூரியன் / சூரியன), which recognisers write inconsistently.
+_NUKTAS = dict.fromkeys(map(ord, "\u093c\u09bc\u0abc"))
+_FINAL_VIRAMAS = "\u094d\u09cd\u0acd\u0bcd\u0c4d"
+_ZERO_WIDTH = ("\u200d", "\u200c")
+
+
 def normalise(word: str) -> str:
     w = unicodedata.normalize("NFC", word).lower().strip()
     w = PUNCT.sub("", w)
-    return w.replace("‍", "").replace("‌", "")
+    for z in _ZERO_WIDTH:
+        w = w.replace(z, "")
+    w = w.translate(_NUKTAS).replace("\u0901", "\u0902")
+    return w.rstrip(_FINAL_VIRAMAS) or w
 
 
 def tokenise(text: str):
@@ -31,8 +42,12 @@ def ratio(a: str, b: str) -> float:
     return difflib.SequenceMatcher(None, a, b).ratio()
 
 
-def score_reading(ref_norm, hyp_norm):
+def score_reading(ref_norm, hyp_norm, ok_ratio=1.0):
     """
+    ok_ratio: how alike a heard word must be to the passage word to count as
+    correct. 1.0 = must match exactly (after the harmless clean-up in normalise).
+    Lower values forgive more, but then real mispronunciations slip through.
+
     status per passage word:
       ok   = read correctly       bad  = misread
       skip = jumped over          wait = never reached (excluded from accuracy)
@@ -54,9 +69,8 @@ def score_reading(ref_norm, hyp_norm):
             for k, i in enumerate(range(i1, i2)):
                 j = j1 + k
                 if j < j2:
-                    # 0.80 forgives a dropped matra, usually recogniser noise.
                     r = ratio(ref_norm[i], hyp_norm[j])
-                    status[i] = "ok" if r >= 0.80 else ("bad" if r >= 0.55 else "skip")
+                    status[i] = "ok" if r >= ok_ratio else ("bad" if r >= 0.55 else "skip")
                 else:
                     status[i] = "skip"
             extra += max(0, (j2 - j1) - (i2 - i1))

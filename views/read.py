@@ -79,6 +79,11 @@ with right:
     st.markdown("#### 2️⃣  Record the child reading aloud")
     audio = st.audio_input("Press the microphone, let the child read, then press stop")
     st.caption("Quiet room, phone or laptop mic about 30 cm away. The child reads the whole passage without stopping.")
+    strict_label = st.radio(
+        "Marking strictness", list(config.STRICTNESS), horizontal=True,
+        help="Strict: a word must match exactly, so a changed sound (sooriyan → sariyan) is marked as misread. "
+             "Standard and Lenient forgive small differences, which also forgives some real mispronunciations.")
+    ok_ratio = config.STRICTNESS[strict_label]
     allow_backup = st.toggle("Backup recogniser if Bhashini fails", value=False,
                              help="Off by default: the backup sends the recording to Google, not to the Government's Bhashini.")
 
@@ -103,7 +108,7 @@ if analyse and audio is not None and ref_norm:
             st.stop()
 
         _, hyp_norm = scoring.tokenise(transcript)
-        res = scoring.score_reading(ref_norm, hyp_norm)
+        res = scoring.score_reading(ref_norm, hyp_norm, ok_ratio)
         wcpm, accuracy, coverage = scoring.compute_metrics(res, len(ref_norm), duration)
         met = int(wcpm >= bench["wpm"] and accuracy >= bench["acc"] and coverage >= config.MIN_COVERAGE_FOR_TARGET)
         v_cls, v_head, v_sub = scoring.verdict_for(wcpm, accuracy, bench["wpm"], bench["acc"])
@@ -204,3 +209,5 @@ if R:
     with st.expander("🔍 What the recogniser heard (check it was fair)"):
         st.info(R["transcript"])
         st.caption(f"Engine: {R['engine']} · {R['heard']} words heard · {R['res']['extra']} extra words")
+        st.caption("Speech recognition sometimes 'corrects' a mispronounced word to the right one. If the child clearly "
+                   "said a word wrongly but it shows green, trust your own ears and note it for practice.")
