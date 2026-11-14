@@ -4,8 +4,7 @@ Padho! — AI Oral Reading Fluency Meter (v2)
 Registration, student profiles, reading history, 5 reading levels, motivation
 badges and printable progress reports, powered by Bhashini speech recognition.
 
-Teacher: K M Ramyasri · Suthukeny Government High School
-Original prototype: Nithyamithran Ramesh, Class VI B, Manav Mandir High School.
+K M Ramyasri, Primary School Teacher (PST) · Suthukeny Government High School
 """
 
 import streamlit as st

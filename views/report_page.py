@@ -13,8 +13,8 @@ streak = bd.current_streak([bd.local_date(a["ts"]) for a in atts])
 default_note = report.auto_comment(stud["name"], atts, stud["level"])
 note = st.text_area("Teacher's note (edit before printing)", value=default_note, height=90,
                     key=f"note_{stud['id']}_{len(atts)}")
-teacher = st.session_state.get("teacher_name") or "K M Ramyasri"
-teacher = st.text_input("Class teacher name on the report", teacher)
+teacher = st.text_input("Teacher name on the report", config.TEACHER_NAME)
+teacher = f"{teacher}, {config.TEACHER_ROLE}"
 
 html = report.build_report(stud, ui.photo_uri(stud), atts, earned, config.SCHOOL_NAME, teacher, note, streak)
 

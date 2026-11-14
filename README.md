@@ -4,8 +4,7 @@ Listens to a child read aloud and measures **how fluently they read**, in seven 
 languages, using the Government of India's **Bhashini** speech recognition. Built for the
 **NIPUN Bharat** mission.
 
-v2 for **Suthukeny Government High School** (class teacher K M Ramyasri). Original prototype:
-Nithyamithran Ramesh, Class VI B, Manav Mandir High School (INSPIRE-MANAK).
+By **K M Ramyasri**, Primary School Teacher (PST), **Suthukeny Government High School**.
 
 ## What is new in v2
 

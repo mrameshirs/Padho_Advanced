@@ -141,6 +141,6 @@ h1,h2,h3{{font-family:'Baloo 2',sans-serif;margin:0}}
 <div class="card"><h3>📝 Words to practise</h3>{miss_html}</div></div>
 <div class="card"><h3>Recent readings</h3><table><tr><th>Date</th><th>Level</th><th>Words/min</th><th>Accuracy</th><th>Passage read</th><th>Target</th></tr>{rows}</table></div>
 <div class="card"><h3>Teacher's note</h3><div class="cm">{escape(comment)}</div></div>
-<div class="sig"><span>Class teacher: {escape(teacher)}</span><span>Parent's signature: ____________</span></div>
+<div class="sig"><span>Teacher: {escape(teacher)}</span><span>Parent's signature: ____________</span></div>
 <p class="foot">Last reading: {last_date}. Padho is a practice and screening tool, not an examination or a diagnosis. Speech recognition can mis-hear accents, so the numbers are a guide for the teacher, not a final judgement of the child.</p>
 </div></body></html>"""

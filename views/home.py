@@ -51,7 +51,7 @@ b[3].page_link("views/badges_page.py", label="What are badges?", icon="🏅")
 
 st.divider()
 st.caption(
-    f"{config.SCHOOL_NAME} · Class teacher K M Ramyasri · Padho is a practice and screening tool for teachers and "
+    f"{config.TEACHER_NAME}, {config.TEACHER_ROLE} · {config.SCHOOL_NAME} · Padho is a practice and screening tool for teachers and "
     "parents, not an examination and not a diagnosis. Speech recognition can mis-hear accents and young "
     "children, so always check the transcript before acting on a low score."
 )

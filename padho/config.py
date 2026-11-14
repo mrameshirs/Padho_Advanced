@@ -18,6 +18,8 @@ def get_secret(name: str, default: str = "") -> str:
 
 SCHOOL_NAME = get_secret("SCHOOL_NAME", "Suthukeny Government High School")
 TEACHER_PIN = get_secret("TEACHER_PIN")
+TEACHER_NAME = get_secret("TEACHER_NAME", "K M Ramyasri")
+TEACHER_ROLE = get_secret("TEACHER_ROLE", "Primary School Teacher (PST)")
 
 IST = timezone(timedelta(hours=5, minutes=30))
 

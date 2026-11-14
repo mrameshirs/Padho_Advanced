@@ -197,7 +197,7 @@ def require_teacher() -> str:
 
     page_header("🔐 Teacher sign-in", "Enter your name and the school PIN to continue.")
     with st.form("login"):
-        name = st.text_input("Your name", placeholder="e.g. K M Ramyasri")
+        name = st.text_input("Your name", placeholder="Your name")
         pin = st.text_input("School PIN", type="password")
         if st.form_submit_button("Sign in", type="primary"):
             if hmac.compare_digest(pin.encode(), config.TEACHER_PIN.encode()):
@@ -235,7 +235,7 @@ def pick_student(key: str, allow_guest=False, label="Student"):
 def sidebar():
     with st.sidebar:
         st.markdown("### 📖 Padho!")
-        st.caption(config.SCHOOL_NAME)
+        st.caption(f"{config.SCHOOL_NAME}  \n{config.TEACHER_NAME}, {config.TEACHER_ROLE}")
         if config.TEACHER_PIN and st.session_state.get("teacher_ok"):
             st.success(f"Signed in: {st.session_state.get('teacher_name', 'Teacher')}")
             if st.button("Sign out", **stretch()):
