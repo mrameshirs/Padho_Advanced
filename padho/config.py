@@ -64,3 +64,29 @@ STRICTNESS = {
     "Standard": 0.90,
     "Lenient": 0.80,
 }
+
+# NIPUN Bharat (Ministry of Education) foundational-literacy target for oral reading:
+# 45-60 words/min by the end of Class 2 and at least 60 words/min correctly, read with
+# meaning, by the end of Class 3. Padho maps these to Level 2 and Level 3.
+NIPUN_WPM = 60
+NIPUN_ACC = LEVELS[3]["acc"]
+NIPUN_SOURCE = "Ministry of Education, NIPUN Bharat Guidelines"
+
+FEATURES = [
+    {"emoji": "🎙️", "name": "Bhashini ASR",
+     "short": "Govt. of India speech recognition",
+     "text": "The Government of India's Bhashini speech recognition (MeitY, AI4Bharat models) listens to the child "
+             "read aloud in 7 languages. It can also read the passage aloud first, word by word. Recordings are never stored."},
+    {"emoji": "🇮🇳", "name": "NIPUN Bharat Standard",
+     "short": "Ministry of Education reading goal",
+     "text": "Targets follow the NIPUN Bharat reading-fluency goal: 45 to 60 words per minute by the end of "
+             "Class 2 and at least 60 by the end of Class 3, read with meaning. Five levels climb toward it."},
+    {"emoji": "📊", "name": "Student Performance Monitoring",
+     "short": "Every reading tracked over time",
+     "text": "Every reading is saved: words per minute, accuracy, difficult words, level progress and badges, "
+             "with graphs for each child and a dashboard for the whole class."},
+    {"emoji": "🧑‍🏫", "name": "Personalised Mentor AI",
+     "short": "A personal practice plan for each child",
+     "text": "Studies each child's own reading history, finds the pattern (slow, careless, tiring or ready to "
+             "move up) and builds a personal 3-day practice plan, focus words and next goal."},
+]

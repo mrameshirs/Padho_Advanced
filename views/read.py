@@ -3,7 +3,7 @@ import json
 import plotly.graph_objects as go
 import streamlit as st
 
-from padho import asr, badges as bd, config, scoring, three, ui
+from padho import asr, badges as bd, config, listen, scoring, three, tts, ui
 from padho.passages import passages_for
 
 teacher = ui.require_teacher()
@@ -70,6 +70,28 @@ with left:
                                 key=f"passage_{lang}_{level}_{pick}")
     disp_tokens, ref_norm = scoring.tokenise(passage_text)
     st.caption(f"{len(ref_norm)} words · {config.LANGS[lang]['label']}")
+    # ---- let the app read the passage first (read-along) ---------------------------
+    listen_on = st.toggle("🔊 Let the app read this passage aloud first", key=f"listen_{lang}_{level}_{pick}",
+                          help="Each word lights up as it is spoken. The child listens, then reads it aloud.")
+    if listen_on:
+        voices = (["Bhashini voice", "Device voice"] if asr.has_keys() else ["Device voice"])
+        v1, v2 = st.columns([3, 2])
+        voice = v1.radio("Voice", voices, horizontal=True, key="voice_mode")
+        gender = v2.radio("Bhashini voice", ["female", "male"], horizontal=True, key="voice_gender",
+                          disabled=voice != "Bhashini voice")
+        audio_b64 = ""
+        if voice == "Bhashini voice":
+            try:
+                with st.spinner("Preparing the Bhashini voice…"):
+                    audio_b64 = tts.speak(passage_text, lang, gender)
+            except Exception as exc:
+                st.warning("The Bhashini voice is not available for this language right now, so the device voice "
+                           "is used instead.")
+                st.caption(str(exc)[:240])
+        ui.show_html(listen.listen_html(disp_tokens, passage_text, audio_b64, config.LANGS[lang]["sr"]),
+                     listen.frame_height(passage_text))
+        st.caption("Highlighting is approximate. After listening, the child reads the passage aloud into the microphone.")
+
     comp = st.select_slider(
         "Optional: after reading, ask 3 oral questions about the passage. How many did the child answer?",
         options=[-1, 0, 1, 2, 3], value=-1,

@@ -7,7 +7,7 @@ sys.path.insert(0, ROOT)
 from streamlit.testing.v1 import AppTest
 from padho import storage, badges
 
-PAGES = ["views/home.py", "views/badges_page.py", "views/register.py", "views/read.py", "views/profile.py",
+PAGES = ["views/home.py", "views/badges_page.py", "views/register.py", "views/read.py", "views/profile.py", "views/mentor.py",
          "views/report_page.py", "views/dashboard.py", "views/admin.py"]
 
 def seed(db):
@@ -43,7 +43,7 @@ def main():
         bad += bool(errs)
     # profile for a student with no readings
     at = AppTest.from_file(APP, default_timeout=60); at.session_state["active_student"] = b; at.run()
-    for p in ("views/profile.py", "views/report_page.py"):
+    for p in ("views/profile.py", "views/mentor.py", "views/report_page.py"):
         at.switch_page(p).run(); errs = [e.value for e in at.exception]
         print(("FAIL " if errs else "ok   ") + p + " (no readings)", errs[:1]); bad += bool(errs)
     sys.exit(1 if bad else 0)

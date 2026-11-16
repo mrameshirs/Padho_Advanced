@@ -103,8 +103,8 @@ def hero_html(school: str) -> str:
     """
     body = (f'<div id="c"></div><div class="txt"><h1>Padho!<br><span style="font-size:.52em;font-weight:700">'
             f'पढ़ो · படி · చదువు · পড়ো</span></h1><div class="sc">AI reading fluency meter · {school}</div>'
-            f'<span class="tag">🇮🇳 Bhashini ASR</span><span class="tag">7 languages</span>'
-            f'<span class="tag">5 reading levels</span><span class="tag">NIPUN Bharat</span></div>')
+            f'<span class="tag">🎙️ Bhashini ASR</span><span class="tag">🇮🇳 NIPUN Bharat Standard</span>'
+            f'<span class="tag">📊 Performance Monitoring</span><span class="tag">🧑‍🏫 Personalised Mentor AI</span></div>')
     return _page(css, body, _HERO_JS)
 
 

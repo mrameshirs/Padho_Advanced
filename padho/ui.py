@@ -87,6 +87,21 @@ h1, h2, h3, h4 { font-family: 'Baloo 2', sans-serif !important; }
 .lvl b { font-family:'Baloo 2',sans-serif; font-size:1.2rem; display:block; }
 .lvl span { font-size:.82rem; font-weight:600; opacity:.95; }
 
+/* mentor card */
+.mentor { background:linear-gradient(135deg,#F4ECFA,#FFF4E6); border:2px solid #D9C2EC; border-radius:22px;
+  padding:20px 24px; margin:6px 0 14px 0; box-shadow:0 8px 22px rgba(123,67,151,.12); }
+.mentor h3 { margin:0 0 4px 0; font-size:1.45rem; color:#3B1C57; }
+.mentor .tagline { color:#7B4397; font-weight:700; font-size:.85rem; letter-spacing:.3px; margin-bottom:6px; }
+.mentor p { margin:6px 0; color:#2C2C2C; }
+.mentor .day { display:flex; gap:12px; background:#fff; border-radius:14px; padding:10px 14px; margin:6px 0; border:1px solid #EADCF3; }
+.mentor .day b { color:#7B4397; font-family:'Baloo 2',sans-serif; min-width:54px; }
+.mentor .goal { background:#fff; border-left:6px solid #F2994A; border-radius:10px; padding:10px 14px; margin:10px 0; font-weight:600; }
+.mentor .nb { background:#FFF4CC; border:1.5px solid #F2C94C; border-radius:12px; padding:8px 14px; display:inline-block; font-weight:700; }
+.feat { background:#fff; border-radius:20px; padding:18px 20px; border:1px solid #F0E4F7; height:100%;
+  box-shadow:0 6px 16px rgba(123,67,151,.10); }
+.feat .em { font-size:2.2rem; line-height:1.1; }
+.feat b { display:block; font-family:'Baloo 2',sans-serif; font-size:1.2rem; color:#3B1C57; margin:4px 0 2px 0; }
+.feat span { color:#5E6368; font-size:.92rem; }
 div[data-testid="stMetricValue"] { font-family:'Baloo 2',sans-serif; }
 iframe { border-radius:22px; }
 </style>
@@ -116,6 +131,31 @@ def inject_css():
 
 def page_header(title: str, sub: str = ""):
     st.markdown(f'<p class="page-title">{title}</p><p class="page-sub">{sub}</p>', unsafe_allow_html=True)
+
+
+def mentor_html(plan: dict) -> str:
+    """HTML card for a Personalised Mentor plan (see padho/mentor.py)."""
+    from html import escape as e
+
+    days = "".join(f'<div class="day"><b>{e(d)}</b><span>{e(t)}</span></div>' for d, t in plan["plan"])
+    words = ""
+    if plan["focus_words"]:
+        words = "<p><b>Focus words:</b> " + "".join(
+            f'<span class="chip chip-bad">{e(w)}</span>' for w in plan["focus_words"]) + "</p>"
+    nb = f'<p><span class="nb">Next badge: {e(plan["next_badge"])} · {e(plan["next_badge_how"])}</span></p>' \
+        if plan.get("next_badge") else ""
+    return (f'<div class="mentor"><div class="tagline">🧑‍🏫 PERSONALISED MENTOR AI</div>'
+            f'<h3>{e(plan["headline"])}</h3><p>{e(plan["diagnosis"])}</p>{words}'
+            f'<div class="goal">🎯 {e(plan["goal"])}</div>'
+            f'<p><b>3-day practice plan</b></p>{days}<p>💬 {e(plan["encouragement"])}</p>{nb}</div>')
+
+
+def features_html() -> str:
+    cols = "".join(
+        f'<div class="feat"><div class="em">{f["emoji"]}</div><b>{f["name"]}</b><span>{f["text"]}</span></div>'
+        for f in config.FEATURES)
+    return ('<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;'
+            f'margin:6px 0 14px 0">{cols}</div>')
 
 
 def tile(cls: str, val, cap: str) -> str:

@@ -4,7 +4,7 @@ from datetime import datetime
 import pandas as pd
 import streamlit as st
 
-from padho import asr, config, storage, ui
+from padho import asr, config, storage, tts, ui
 
 ui.require_teacher()
 store = ui.store()
@@ -106,6 +106,14 @@ if asr.has_keys():
                 st.code(str(exc), language=None)
 else:
     st.error("Bhashini keys are missing. Add `BHASHINI_USER_ID` and `BHASHINI_API_KEY` in Secrets.")
+
+if asr.has_keys() and st.button("🔊 Test Bhashini voice (read aloud) for all 7 languages"):
+    for code, meta in config.LANGS.items():
+        try:
+            cfg = tts.test_voice(code)
+            st.success(f"{meta['label']}: voice available · `{cfg['service_id']}`")
+        except Exception as exc:
+            st.warning(f"{meta['label']}: no Bhashini voice ({str(exc)[:160]}). The device voice will be used.")
 
 st.markdown("### 🔐 Security checklist")
 st.markdown(

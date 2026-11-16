@@ -6,6 +6,32 @@ languages, using the Government of India's **Bhashini** speech recognition. Buil
 
 By **K M Ramyasri**, Primary School Teacher (PST), **Suthukeny Government High School**.
 
+## The four pillars (shown on the Home page and on every Progress Card)
+
+| | |
+|---|---|
+| 🎙️ **Bhashini ASR** | Government of India speech recognition (MeitY, AI4Bharat models) listens to the child in 7 languages |
+| 🇮🇳 **NIPUN Bharat Standard** | Reference targets follow the Ministry of Education goal: 45-60 words/min by end of Class 2, at least 60 by end of Class 3, read with meaning |
+| 📊 **Student Performance Monitoring** | Every reading saved; graphs per child; class dashboard |
+| 🧑‍🏫 **Personalised Mentor AI** | Reads each child's own history and writes a personal 3-day practice plan, focus words and next goal |
+
+The mentor is data-driven and rule-based (see `padho/mentor.py`). It runs inside the app, so nothing about the
+child is sent to any outside AI service. It supports the teacher and does not replace her.
+
+## Read-along: the app reads the passage first
+
+On **Read & Assess**, switch on **"Let the app read this passage aloud first"**. The passage appears with a
+**🔊 Listen** button (and a **🐢 Slow** option). Each word lights up as it is spoken, then the child reads it
+aloud into the microphone.
+
+- **Bhashini voice:** tries the Government's text-to-speech (female or male) using your Bhashini keys. The voice
+  is generated once per passage and remembered, so repeat listens are instant.
+- **Device voice:** the phone or computer's own voice. Works without Bhashini, but depends on the device having a
+  voice for that language (Android Chrome usually does; some Windows PCs lack Tamil or Telugu).
+- If the Bhashini voice is not available for a language, the app tells you and uses the device voice.
+- Word highlighting is approximate (timed across the speech), and is a guide for the child's eyes only.
+- Admin page → **Test Bhashini voice** shows which languages have a Bhashini voice on your account.
+
 ## What is new in v2
 
 | Area | Feature |
@@ -22,8 +48,8 @@ By **K M Ramyasri**, Primary School Teacher (PST), **Suthukeny Government High S
 
 ## Pages
 
-Home · Motivation Badges · Register student · Read & Assess · Student profile · Progress report ·
-Class dashboard · Admin & backup
+Home · Motivation Badges · Register student · Read & Assess · Student profile · Personalised Mentor AI ·
+Progress card · Class dashboard · Admin & backup
 
 ## Deploying (Streamlit Community Cloud)
 
@@ -59,6 +85,8 @@ Without Supabase keys the app runs on a local file `padho_local.db` (fine for tr
 pytest tests/test_core.py          # scoring, badges, storage
 python tests/test_pages.py         # every page runs with seeded data
 python tests/test_read_flow.py     # record → score → save → badge → level-up
+pytest tests/test_tts.py           # read-aloud (Bhashini voice stubbed)
+python tests/test_listen_page.py   # Read page with read-along on
 ```
 
 ## Adding passages

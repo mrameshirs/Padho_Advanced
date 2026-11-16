@@ -24,6 +24,9 @@ for col, (cls, val, cap) in zip(c, [
 ]):
     col.markdown(ui.tile(cls, val, cap), unsafe_allow_html=True)
 
+st.markdown("#### What powers Padho")
+st.markdown(ui.features_html(), unsafe_allow_html=True)
+
 st.markdown("#### How it works")
 s = st.columns(4)
 for col, (n, t, d) in zip(s, [

@@ -6,7 +6,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from padho import badges, scoring, storage  # noqa: E402
+from padho import badges, mentor, scoring, storage  # noqa: E402
 from padho.passages import PASSAGES  # noqa: E402
 
 
@@ -117,3 +117,29 @@ def test_promotion():
     assert badges.promotion(1, a) == 2
     assert badges.promotion(1, a[:2]) == 1
     assert badges.promotion(5, [_att(i, 99, level=5, met=1) for i in range(5)]) == 5
+
+
+def _full(day, w, acc=92, cov=100, level=2, met=0, bad=()):
+    import json as _j
+    a = _att(day, w, acc, cov, level, met)
+    a.update({"bad_words": _j.dumps(list(bad), ensure_ascii=False), "skip_words": "[]"})
+    return a
+
+
+STUD = {"name": "Asha Devi", "level": 2}
+
+
+def test_mentor_patterns():
+    assert mentor.build(STUD, [], set())["pattern"] == "new"
+    assert mentor.build(STUD, [_full(i, 30, 95) for i in range(3)], set())["pattern"] == "accurate_slow"  # target 45/85
+    assert mentor.build(STUD, [_full(i, 60, 70) for i in range(3)], set())["pattern"] == "fast_careless"
+    assert mentor.build(STUD, [_full(i, 60, 95) for i in range(3)], set())["pattern"] == "on_target"
+    assert mentor.build(STUD, [_full(i, 20, 60) for i in range(3)], set())["pattern"] == "building"
+    assert mentor.build(STUD, [_full(i, 30, 95, cov=50) for i in range(3)], set())["pattern"] == "stamina"
+
+
+def test_mentor_focus_words_and_badge_hint():
+    a = [_full(0, 30, 80, bad=["பூக்கள்"]), _full(1, 33, 82, bad=["பூக்கள்", "பறவை"])]
+    p = mentor.build(STUD, a, {"first_steps"})
+    assert p["focus_words"][0] == "பூக்கள்" and "பூக்கள்" in p["persistent_words"]
+    assert len(p["plan"]) >= 3 and p["next_badge"] and "High Five" in p["next_badge"]

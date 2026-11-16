@@ -29,7 +29,8 @@ pages = {
         st.Page("views/register.py", title="Register student", icon="📝"),
         st.Page("views/read.py", title="Read & Assess", icon="🎤"),
         st.Page("views/profile.py", title="Student profile", icon="🧒"),
-        st.Page("views/report_page.py", title="Progress report", icon="📄"),
+        st.Page("views/mentor.py", title="Personalised Mentor AI", icon="🧑‍🏫"),
+        st.Page("views/report_page.py", title="Progress card", icon="📄"),
     ],
     "Teacher": [
         st.Page("views/dashboard.py", title="Class dashboard", icon="📊"),

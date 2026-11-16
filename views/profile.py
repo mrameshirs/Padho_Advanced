@@ -5,7 +5,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-from padho import badges as bd, config, three, ui
+from padho import badges as bd, config, mentor, three, ui
 
 store = ui.store()
 LV = config.LEVELS
@@ -57,6 +57,9 @@ with m:
     else:
         st.info("No badges yet. The first one comes after the first reading!")
         st.page_link("views/read.py", label="Start a reading", icon="🎤")
+
+# ---------------------------------------------------------------- personalised mentor
+st.markdown(ui.mentor_html(mentor.build(stud, atts, set(earned))), unsafe_allow_html=True)
 
 # ----------------------------------------------------------------------- graphs
 if atts:
